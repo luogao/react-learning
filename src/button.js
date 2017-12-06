@@ -11,7 +11,6 @@ class Button extends Component {
     }
 
     handleClick(e) {
-        console.log(this)
         this.setState({
             liked: !this.state.liked
         });
