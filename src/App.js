@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Button from './button.js'
-import Game from './Game.js'
+import Game from './Tic-tac-toe-game/Game.js'
+import SortableList from './Sortable-List/list.js'
+const colors = ["Red","Green","Blue","Yellow","Black","White","Orange"];
 class App extends Component {
   render() {
     return (
@@ -19,6 +21,10 @@ class App extends Component {
         <Button></Button>
         <div className="flex-center-center">
           <Game/>
+        </div>
+
+        <div className="sortable-list-container">
+          <SortableList data={colors} />
         </div>
       </div>
     );
