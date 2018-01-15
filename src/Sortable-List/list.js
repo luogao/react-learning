@@ -6,7 +6,6 @@ class SortableList extends Component {
         super(props);
         this.state = {
             data: this.props.data,
-            dragged: null,
             nodePlacement: null
         }
         this.dragOver = this
@@ -18,33 +17,27 @@ class SortableList extends Component {
         this.dragStart = this
             .dragStart
             .bind(this)
-
     }
     dragEnd(e) {
-        let dragged = this.state.dragged
-        dragged.style.display = 'block'
-        this.setState({dragged: dragged})
-        this
-            .state
-            .dragged
-            .parentNode
-            .removeChild(placeholder);
+        this.dragged.style.display = 'block'
+        if (!this.dragged.parentNode.contains(placeholder)) {
+            return
+        }
+        this.dragged.parentNode.removeChild(placeholder);
         // Update state
         var data = this.state.data;
-        var from = Number(this.state.dragged.dataset.id);
+        var from = Number(this.dragged.dataset.id);
         var to = Number(this.over.dataset.id);
         if (from < to) 
             to--;
-        if (this.state.nodePlacement === "after") 
+        if (this.nodePlacement === "after") 
             to++;
         data.splice(to, 0, data.splice(from, 1)[0]);
         this.setState({data: data});
     }
     dragOver(e) {
         e.preventDefault();
-        let dragged = this.state.dragged
-        dragged.style.display = 'none'
-        this.setState({dragged: dragged})
+        this.dragged.style.display = 'none'
         if (e.target.className === "placeholder") 
             return;
         this.over = e.target;
@@ -54,20 +47,18 @@ class SortableList extends Component {
         var parent = e.target.parentNode;
 
         if (relY > height) {
-            this.setState({nodePlacement: "after"})
+            this.nodePlacement="after"
             parent.insertBefore(placeholder, e.target.nextElementSibling);
         } else if (relY < height) {
-            this.setState({nodePlacement: "before"})
+            this.nodePlacement="before"
             parent.insertBefore(placeholder, e.target);
         }
     }
     dragStart(e) {
-        this.setState({dragged: e.currentTarget})
+        this.dragged =  e.currentTarget
         e.dataTransfer.effectAllowed = 'move';
         // Firefox requires calling dataTransfer.setData for the drag to properly work
-        e
-            .dataTransfer
-            .setData("text/html", e.currentTarget);
+        e.dataTransfer.setData("text/html", e.currentTarget);
     }
     render() {
         return (
